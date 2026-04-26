@@ -19,6 +19,66 @@
   .nav-links a{font-size:.7rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-soft);text-decoration:none;transition:color .2s}
   .nav-links a:hover{color:var(--rose)}
 
+/* ── CAROUSEL ── */
+
+.carousel {
+  position: relative;
+  width: 100%;
+  max-width: 420px;   /* IMPORTANT */
+  margin: 0 auto;
+  overflow: hidden;
+}
+.carousel-track {
+  display: flex;
+  width: 100%;
+}
+
+.carousel-slide {
+  min-width: 100%;
+  flex: 0 0 100%;
+  border-radius:50px;
+}
+.carousel-track {
+  display: flex;
+  width: 100%;
+  transition: transform 0.45s ease;
+  border-radius:50px;
+}
+.carousel-slide { background:red; 
+}
+.carousel {
+  padding-bottom: 5px;
+}
+.carousel-btn {
+  position:absolute; top:45%; transform:translateY(-50%);
+  background:rgba(255,248,252,0.88);
+  border:1px solid rgba(201,116,143,0.25);
+  color:var(--rose-dark);
+  width:36px; height:36px; border-radius:50%;
+  font-size:1rem; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background .2s;
+  backdrop-filter:blur(6px);
+  z-index:10;
+}
+.carousel-btn:hover { background:var(--rose); color:white; }
+.carousel-btn.prev { left:10px; }
+.carousel-btn.next { right:10px; }
+
+.carousel-dots {
+  display:flex; justify-content:center; gap:6px;
+  margin-top:12px;
+}
+.carousel-dot {
+  width:6px; height:6px; border-radius:50%;
+  background:var(--rose-light);
+  border:1px solid var(--rose);
+  cursor:pointer; transition:background .2s, transform .2s;
+}
+.carousel-dot.active {
+  background:var(--rose); transform:scale(1.3);
+}
+
   /* ══ MUSIC PLAYER ══ */
   .player{
     position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%);z-index:200;
@@ -115,9 +175,17 @@
   .memory.reverse{direction:rtl}
   .memory.reverse>*{direction:ltr}
   @media(max-width:600px){.memory,.memory.reverse{grid-template-columns:1fr;direction:ltr}}
-  .photo-frame{aspect-ratio:4/5;background:var(--rose-light);border-radius:4px;position:relative;overflow:hidden;box-shadow:6px 6px 0 var(--rose-light),12px 12px 0 rgba(180,120,140,.1);transition:transform .3s}
+  .photo-frame{aspect-ratio:4/5;background:var(--rose-light);border-radius:4px;position:relative;overflow:hidden;box-shadow:6px 6px 0 var(--rose-light),12px 12px 0 
+rgba(180,120,140,.1);transition:transform .3s}
+
   .photo-frame:hover{transform:scale(1.02) rotate(-.5deg)}
   .photo-frame img{width:100%;height:100%;object-fit:cover;display:block}
+  .photo-frame video{
+  width:100%;
+  height:100%;
+  object-fit:contain !important;  /* FORCE fix */
+  background:rose-light;
+}
   .photo-placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;color:var(--rose)}
   .photo-placeholder svg{width:36px;height:36px;opacity:.5}
   .photo-placeholder p{font-size:.75rem;letter-spacing:.15em;color:var(--text-soft);text-align:center;padding:0 1rem}
@@ -136,7 +204,7 @@
   .letter-sign{margin-top:2.5rem;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:1.2rem;color:var(--rose)}
 
   /* FOOTER */
-  footer{text-align:center;padding:3rem 1.5rem 6rem;border-top:1px solid var(--rose-light);background:white}
+  footer{text-align:center;padding:3rem 1.5rem 8rem;border-top:1px solid var(--rose-light);background:white}
   footer .heart{display:inline-block;width:20px;height:20px;background:var(--rose);transform:rotate(-45deg);position:relative;margin:0 auto 1rem;animation:heartbeat 1.5s ease-in-out infinite}
   footer .heart::before,footer .heart::after{content:'';position:absolute;width:20px;height:20px;background:var(--rose);border-radius:50%}
   footer .heart::before{top:-10px;left:0}
@@ -148,8 +216,8 @@
 <body>
 
 <nav id="nav">
-  <!-- ✏️ Change "Your Names" to your actual names -->
-  <span class="nav-name">Your Names</span>
+  <!-- ✏️ Change "Shreya and Vaibhav" to your actual names -->
+  <span class="nav-name">Shreya and Vaibhav</span>
   <ul class="nav-links">
     <li><a href="#memories">Our Moments</a></li>
     <li><a href="#letter">Love Letter</a></li>
@@ -173,8 +241,8 @@
   </div>
   <div class="player-info">
     <!-- ✏️ Change song title and artist name here -->
-    <div class="player-song" id="songName">Your Song Title Here</div>
-    <div class="player-artist" id="songArtist">Artist Name</div>
+    <div class="player-song" id="songName">O Mere Sona Re</div>
+    <div class="player-artist" id="songArtist">Asha Bhosle and Mohm. Rafi</div>
     <div class="progress-wrap">
       <div class="progress-bar" id="progressBar">
         <div class="progress-fill" id="progressFill"></div>
@@ -187,7 +255,7 @@
   </div>
   <div class="player-controls">
     <button class="btn-play paused" id="btnPlay" title="Play / Pause">
-      <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+      <svg class="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></svg>
       <svg class="pause-icon" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
     </button>
     <button class="btn-vol" id="btnVol" title="Mute / Unmute">
@@ -208,9 +276,9 @@
     <span></span>
   </div>
   <!-- ✏️ Change the dates below -->
-  <p class="hero-date">April 24, 2024 — April 24, 2025</p>
+  <p class="hero-date">April 26, 2025 — April 26, 2026</p>
   <!-- ✏️ Change the names below -->
-  <p class="hero-names">Your Name &amp; Partner's Name</p>
+  <p class="hero-names">Shreya &amp; Vaibhav</p>
   <div class="scroll-hint">
     <p>Scroll</p>
     <div class="scroll-line"></div>
@@ -231,68 +299,417 @@
           div below with:
           <img src="photo1.jpg" alt="describe the photo" />
         -->
-        <div class="photo-placeholder">
+        <img src="photo1.jpeg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
           <p>Replace with your photo</p>
-        </div>
+        
       </div>
       <div class="memory-text">
         <span class="memory-number">01</span>
-        <span class="memory-tag">Where it began</span><!-- ✏️ Short tag -->
-        <p class="memory-caption">The Day We First Met</p><!-- ✏️ Title -->
-        <p class="memory-note">Write a short note about this memory — what happened, how you felt, what you remember most about this moment together.</p><!-- ✏️ Your note -->
+        <span class="memory-tag">16 Mar'25</span><!-- ✏️ Short tag -->
+        <p class="memory-caption">The Day it all started</p><!-- ✏️ Title -->
+        <p class="memory-note">I remember you saying something like ki ham ab reh skte h saath.. and I was so so happy... Tum meri god m sar rakh k lete aur m bhut excited thi future k baare m soch soch kar.. Pranav aur Hottie kese bhage the bahana maar ke 😂 yaad h sab.. Aur tumhara vo butterfly k feathers k samne photo 😝 so cutee..</p><!-- ✏️ Your note -->
       </div>
     </div>
 
     <!-- ── MEMORY 2 (photo RIGHT) ── -->
-    <div class="memory reverse" data-scroll>
-      <div class="photo-frame">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          <p>Replace with your photo</p>
+   <!-- ── VIDEO MEMORY (photo LEFT) ── -->
+	<div class="memory reverse" data-scroll>
+ 	
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo2.jpeg" alt="">
         </div>
       </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid2.1.mp4" controls playsinline></video>
+        </div>
+      </div>
+	
+      <!-- VIDEO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid2.2.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+     <!-- VIDEO 3 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid2.3.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+    <!-- VIDEO 4 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid2.4.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
       <div class="memory-text">
         <span class="memory-number">02</span>
-        <span class="memory-tag">Our adventure</span>
-        <p class="memory-caption">Our First Trip Together</p>
-        <p class="memory-note">Describe this memory — the smells, the laughter, a tiny detail only the two of you would remember.</p>
+       	<span class="memory-tag">28 Jun'25</span>
+        <p class="memory-caption">Our First Trip Together</p> 
+        <p class="memory-note">It was the sweetest and most special you have ever made me feel.. You travelling to Chennai just to meet me 😭, kya hi punya kiye the maine jo koi mere liye esa kare. We had a lot of fun too.. tumhara pehla beach experience, udhar pakode aur omelette khana aur at the end poore per ret se bhar jaana, raat ko shawarma leke aana just because nhi pata tha bhook lagegi raat m 😂. And not to forget ret se bhare ek dusre k kapde dhona aur room saaf karna.. ufffff, best trip of my life, I wish I could do all of it again kabhi..</p>
       </div>
     </div>
 
     <!-- ── MEMORY 3 (photo LEFT) ── -->
-    <div class="memory" data-scroll>
-      <div class="photo-frame">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          <p>Replace with your photo</p>
+  <!-- ── VIDEO MEMORY (photo LEFT) ── -->
+	<div class="memory" data-scroll>
+ 	
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo3.jpeg" alt="">
         </div>
       </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid3.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
+
       <div class="memory-text">
         <span class="memory-number">03</span>
-        <span class="memory-tag">A quiet moment</span>
-        <p class="memory-caption">Just the Two of Us</p>
-        <p class="memory-note">A softer, quieter memory — the kind that doesn't photograph well but lives forever in your chest.</p>
+	<span class="memory-tag">02 Aug'25</span>
+        <p class="memory-caption">The Goodbye</p>
+        <p class="memory-note"> Goodbyes ka toh ek alag hi folder ban skta h..but this one was special for me. Pehli baar mujhe station chhodne itne log aaye.. aur tumne pehla gift diya tha is din mujhe.. vo collage with all our memories till date. Likhvaya fir bhi sab mujhse hi uspe😂 but yet it was so sweet and thoughtful. I loved the gift and the people jo the uss wakt mere saath.. You made me feel so loved ki kya hi kahu. Tum aur sab train k peeche bhaag rhe the.. bhut yaad arhi sabki 😔, it was really hard. </p>
       </div>
     </div>
 
     <!-- ── MEMORY 4 (photo RIGHT) ── -->
     <div class="memory reverse" data-scroll>
-      <div class="photo-frame">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          <p>Replace with your photo</p>
+      
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo4.1.jpeg" alt="">
         </div>
       </div>
+
+      <!-- PHOTO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo4.2.jpeg" alt="">
+        </div>
+      </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid4.1.mp4" controls playsinline></video>
+        </div>
+      </div>
+     
+     <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid4.2.mp4" controls playsinline></video> <!--mataladosa-->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
+
       <div class="memory-text">
         <span class="memory-number">04</span>
-        <span class="memory-tag">One year later</span>
-        <p class="memory-caption">Here We Are</p>
-        <p class="memory-note">Add your most recent photo and a note about where you both are now — how you've grown, what you've built, what's still ahead.</p>
+        <span class="memory-tag">14 Aug'25</span>
+        <p class="memory-caption">Trip with Fam</p>
+        <p class="memory-note">Ye trip toh yrr life time yaad rahne wali h. M hamesha se esi trip imagine karti thi.. jisme sab dost ho khoob masti ho and pahad 💖... Mera bucket list ka ek chiz poora hogya. Vo trip p hui behas about kahan jaenge aur kese jaenge, Hottie ki scooty ki zidd, subah train aur bus dono chhod dena 😂, car ki masti, camping aur trekking aur fir vapsi ki train ka struggle... sab kuch ekdum memorable..</p>
+      </div>
+    </div>
+<!-- ── MEMORY 5 (photo LEFT) ── -->
+<!-- ── VIDEO MEMORY (photo LEFT) ── -->
+	<div class="memory" data-scroll>
+ 	
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid5.1.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+      <!-- VIDEO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid5.2.mp4" controls playsinline></video>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+          <div class="memory-text">
+        <span class="memory-number">05</span>
+        <span class="memory-tag">26 Aug'25</span>
+        <p class="memory-caption">Placement & Confession</p>
+        <p class="memory-note"> Me sach bolu toh kabhi placement k baare m sochi hi nhi thi, kya karna h kese karna h kabhi utna thought nhi di. But poore drive k journey m tumne mujhe ekdum mentor jaise help kiya. Mera mock interview leke rulaya, mujhe high aur kabhi kabhi unrealistic expectations di, khoob morale boost kiya.. thank you so much baby for all of it..🫶🏼 Aur fir placement k baad next day tum mujhe finally I love you bhi boldiye🥹. Sab kuch ab yaad karke bhut story jaisa lagta h..</p>
       </div>
     </div>
 
-    <!--
+<!-- ── MEMORY 6 (photo LEFT) ── -->
+<!-- ── VIDEO MEMORY (photo LEFT) ── -->
+	<div class="memory reverse" data-scroll>
+ 	<div class="photo-frame" style="aspect-ratio: 4/5;">
+    	<video
+      	src="vid6.mp4"
+      	controls
+      	playsinline
+      	style="width:100%; height:100%; object-fit:cover; display:block;"
+    	></video>
+  	</div>
+          <div class="memory-text">
+        <span class="memory-number">06</span>
+        <span class="memory-tag">16 Nov'25</span>
+        <p class="memory-caption">Jalapeno date</p>
+        <p class="memory-note"> I know ye pehla wala nhi h, but I feel it's worth remembering. How you fed me pizza with your hand and garlic bread, Jalapenoes nikalke... full princess treatment... also jab tum biryani khilaye the jis raat hamlog ladliye the aapki project ppt banate waqt 😂...Ye mujhe bhut sweet lga tha, aur yaad karke smile ajata h chehre p 🥰...</p>
+      </div>
+    </div>
+
+<!-- ── MEMORY 7 (photo RIGHT) ── -->
+    <div class="memory" data-scroll>
+      
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo7.1.jpeg" alt="">
+        </div>
+      </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid7.1.mp4" controls playsinline></video> <!--plane jane wala rasta-->
+        </div>
+      </div>
+    
+     <!-- VIDEO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid7.2.mp4" controls playsinline></video> <!--plane udna-->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
+
+      <div class="memory-text">
+        <span class="memory-number">07</span>
+        <span class="memory-tag">06 Feb'26</span>
+        <p class="memory-caption">My First Times</p>
+        <p class="memory-note">Mera pehla flight experience aur Delhi ghumna. Jaane se pehle kayi din, poore raaste bhar, aur airport pahuchne tak m bhut jyada excited thi ki I will be experiencing all these things for the first time with You par fir plane m mujhse jyada tumhe khush dekh kar mujhe bhut jyada khushi hui💗. Plane takeoff karega abhi darr lagega.. landing m lagega, view dekhoo..ye sab tumhare words the aur tum itna jyada excited the ki mujhe ek point p hasi aane lagi😂 ki itna bhi khaas nhi h kuch but fir realise hua ki khaas h kyuki tumhare sath h.</p>
+      </div>
+    </div>
+
+<!-- ── MEMORY 8 (photo LEFT) ── -->
+    <div class="memory reverse" data-scroll>
+      
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo8.1.jpeg" alt="">
+        </div>
+      </div>
+      
+      <!-- PHOTO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo8.2.jpeg" alt=""> <!--beatencoffee-->
+        </div>
+      </div>
+      
+      <!-- PHOTO 3 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo8.3.jpeg" alt=""> <!--beatencoffee-->
+        </div>
+      </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid8.mp4" controls playsinline></video> <!--going raastewali-->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
+
+      <div class="memory-text">
+        <span class="memory-number">08</span>
+        <span class="memory-tag">13 Mar'26</span>
+        <p class="memory-caption">Delhi</p>
+        <p class="memory-note">Iss baar m mujhe sabse jyada maza aaye.. Bhale hi sab bhag daud m tha.. but sabkuch hamlog milke figure out kr rhe the kaha jana h kya khana h, tum mera list complete kara rhe the.. 55 - 56 p coffee aur aalu tikki aur chickenn😋😋, CP wale hanuman ji k mandir jaana.. Photoshoots vo bhi ek din m 3 baar uff bhut maza aaya. Aur shopping😍... vahan se toh vapas jaane ka hi mann nhi kar rha tha..Tumne jo India gate p itna embarass kiya mujhe..🥹🥹.. Aur fir finally vo airport p bye bolna..worst part of the trip.. but bhut maza aya itna travelling m bhi. Practice ho gyi.. ab toh aur karunga.😁</p>
+      </div>
+    </div>
+
+<!-- ── MEMORY 9 (photo RIGHT) ── -->
+    <div class="memory" data-scroll>
+      
+	<!-- CAROUSEL -->
+  <div class="carousel">
+
+    <div class="carousel-track">
+
+      <!-- PHOTO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo9.1.jpeg" alt="">
+        </div>
+      </div>
+      
+      <!-- PHOTO 2 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <img src="photo9.2.jpeg" alt="">
+        </div>
+      </div>
+
+      <!-- VIDEO 1 -->
+      <div class="carousel-slide">
+        <div class="photo-frame">
+          <video src="vid9.mp4" controls playsinline></video> <!--mannucooking-->
+        </div>
+      </div>
+
+    </div>
+
+    <!-- buttons -->
+    <button class="carousel-btn prev">&#8592;</button>
+    <button class="carousel-btn next">&#8594;</button>
+
+    <!-- dots -->
+    <div class="carousel-dots"></div>
+
+  </div>
+
+
+
+      <div class="memory-text">
+        <span class="memory-number">09</span>
+        <span class="memory-tag">10 Apr'26</span>
+        <p class="memory-caption">Here We Are</p>
+        <p class="memory-note">It's not have been so easy jitna maine socha tha, bhut jhagde.. call p mana na, call p sona. Itna door rehke bas ham ekdusre p trust, pyaar aur comminication k bal p saath m hain aur I am happily going to take this not so easy journey with you, because I trust you and love you dearly.💗  </p>
+      </div>
+    </div>
+
+<!-- ── MEMORY 10 (video CENTRE) ── -->
+<div class="memory-center" data-scroll>
+  <div class="photo-frame" style="width: 100%; max-width: 420px; aspect-ratio: 4/5; margin: 0 auto;">
+    <video
+      src="vid10.mp4"
+      controls
+      playsinline
+      style="width:100%; height:100%; object-fit:cover; display:block;"
+    ></video>
+  </div>
+  <div class="memory-text" style="text-align: center; padding: 1.5rem 0;">
+    <p class="memory-caption">From Friendship to Love</p>
+    <p class="memory-note" style="max-width: 480px; margin: 0 auto;">I feel blessed to be with a friend who is sundar, smart, intelligent, caring and responsible all in one. I love you so much..😘 </p>
+  </div>
+</div>
+<!--
     ══════════════════════════════════════════════
     ADD MORE MEMORIES HERE — copy the block below
     and paste it above this comment.
@@ -321,17 +738,21 @@
   <h2 class="section-title">A Letter For You</h2>
   <div class="letter-wrapper">
     <!-- ✏️ Change the greeting -->
-    <p class="letter-greeting">My darling,</p>
+    <p class="letter-greeting">Hi Baby,</p>
     <!-- ✏️ Write your full letter here. Line breaks are preserved. -->
-    <div class="letter-body">Write your letter here. This is your space to say everything you've been meaning to say — the things that get lost in daily life, the feelings that are too big for a text message.
+    <div class="letter-body">It's already been a year?... Bhut saari travelling aur long distance k beech itna samay kab nikal gaya pata hi nahi chala. Maine bhut socha tha hamara first year kaise celebrate karenge, kab hona chahiye, kahan hona chahiye.. par plans kab hi poore hote h.. phir bhi m esi hi hu.. plans banake excited hoke khush hone wali.. aur tum 🙃 go with the flow wale.. I hope life hame ekdsure k balance k tarah hi rakhe... I miss you sweeta, bhut zyada... Tumhare saath m keval vo kuch mahine hi spend kr paai uske baad sab bhaag daud m hi raha h, I hope this comes to an end jitna jaldi ho paae. M koi chance nhi chhodungi tumse milne ka tabtak.. kabhi bhi ajaungi.. ready rehna.😉
 
-Tell them what this year has meant to you. The ordinary Tuesday evenings. The way they laugh. The moment you knew.
+Ye saal mere liye aur tumhare liye bhut challenging raha h personal life ki problems, career bana na aur fir ekdusre se door rehna sab saath aagya, but still we managed to navigate through it nicely and together.. and I hope it will get better from here. All I understood about you and us in this year is that we are kaafi opposite.. but that's what I think gives us a chance to always be excited and curious to know about each other. Haamare baat karne k topics kabhi khatam nhi ho skte.. aur hamari behas bhi..😜
 
-You can make this as long as you want — the layout will grow with it. Write freely. Be honest. Be tender.
+I am so happy to be with you, you are someone who knows how to carry his priorities, and even though it is sometimes hard for you too to go forward in some conflicts between us, you still don't leave me alone. Itna door hoke bhi ladai k baad call p sona has been a constant and so touchy effort of reassurance from your side 🫶🏼 I really love it.
 
-This is just between the two of you.</div>
+Tumne khud m bhut changes laaye h baby. From a person jisko commitment word sunke bhi topic change karne ka bahana chahiye rehta tha, jo kehta tha ki bhut baar hoga ki call bhi n ho bhut din.. to someone jo mujhe apne dosto se introduce kara chuka h in a year, roz call message krta h, saath m ghum chuke h and whatnot. I feel so happy and proud of your efforts. Thank you so much for coming into my life. Tum door hote ho toh bhut khalipan lagta h, I miss you a lot..🥹
+
+Lastly, I want to make a resolution for our first year together. Although ye mere liye hi h but you have been consistently trying this for me.. So, ye saal m apna poora best try karungi to get my sleep schedule better. Na karu toh you are free to give me taane aur daat bhi sakte ho.. bas baby ignore na karna.
+
+💖I love you so much💖</div>
     <!-- ✏️ Change the sign-off -->
-    <p class="letter-sign">— With all my love, Your Name</p>
+    <p class="letter-sign">— With all my love, Shreya</p>
   </div>
 </section>
 
@@ -339,7 +760,7 @@ This is just between the two of you.</div>
 <footer>
   <div class="heart"></div>
   <!-- ✏️ Change names and date -->
-  <p>Your Name &amp; Partner's Name · April 24, 2025</p>
+  <p>Shreya &amp; Vaibhav · April 26, 2025</p>
   <p style="margin-top:.5rem;font-size:.7rem">One year down. A lifetime to go.</p>
 </footer>
 
@@ -357,7 +778,7 @@ This is just between the two of you.</div>
 
   // ══ MUSIC PLAYER ══
   // ✏️ STEP 1: Replace '' with your mp3 filename, e.g. 'our-song.mp3'
-  const audio = new Audio('');
+  const audio = new Audio('sona re.mp3');
   audio.loop = true;
 
   const btnPlay  = document.getElementById('btnPlay');
@@ -404,6 +825,51 @@ This is just between the two of you.</div>
     audio.muted = muted;
     document.getElementById('volIcon').style.opacity = muted ? '0.3' : '1';
   });
+
+// ── CAROUSEL FIXED ──
+document.querySelectorAll('.carousel').forEach(carousel => {
+  const track  = carousel.querySelector('.carousel-track');
+  const slides = carousel.querySelectorAll('.carousel-slide');
+  const dotsEl = carousel.querySelector('.carousel-dots');
+
+  let current = 0;
+
+function goTo(index) {
+  current = (index + slides.length) % slides.length;
+
+  const offset = current * carousel.offsetWidth;
+  track.style.transform = `translateX(-${offset}px)`;
+
+  dotsEl.querySelectorAll('.carousel-dot').forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+}
+
+  // INIT POSITION (IMPORTANT FIX)
+  track.style.transform = `translateX(0px)`;
+
+  // dots
+  slides.forEach((_, i) => {
+    const dot = document.createElement('div');
+    dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+    dot.onclick = () => goTo(i);
+    dotsEl.appendChild(dot);
+  });
+
+  // buttons
+  carousel.querySelector('.prev').onclick = () => goTo(current - 1);
+  carousel.querySelector('.next').onclick = () => goTo(current + 1);
+
+  // swipe
+  let startX = 0;
+  carousel.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+  carousel.addEventListener('touchend', e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 40) {
+      goTo(current + (diff > 0 ? 1 : -1));
+    }
+  });
+});
 </script>
 
 </body>
